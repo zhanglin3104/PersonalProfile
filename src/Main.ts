@@ -132,7 +132,7 @@ class Main extends egret.DisplayObjectContainer {
         Page1.touchEnabled = true;
         pagemove(Page1);
 
-        var sky1:egret.Bitmap = this.createBitmapByName("bg2_jpg");
+        var sky1:egret.Bitmap = this.createBitmapByName("bg2_jpg");//背景图
         var stageW:number = this.stage.stageWidth;
         var stageH:number = this.stage.stageHeight;
         sky1.width = stageW;
@@ -141,7 +141,7 @@ class Main extends egret.DisplayObjectContainer {
 
         
         
-        var bottomMask = new egret.Shape();
+        var bottomMask = new egret.Shape(); //主体白色背景框
         bottomMask.graphics.beginFill(0xFFFFFF, 0.5);
         bottomMask.graphics.drawRect(0, 0, 550, 560);
         bottomMask.graphics.endFill();
@@ -161,8 +161,6 @@ class Main extends egret.DisplayObjectContainer {
         + "Be through my lips to unawaken'd earth\n\n"
         + "The trumpet of a prophecy78! Oh Wind,\n\n"
         + "If Winter comes, can Spring be far behind?" ;
-       
-       
         mainText.textColor = 0xFFFFFF;
         mainText.alpha = 1;
         mainText.size = 24;
@@ -171,15 +169,19 @@ class Main extends egret.DisplayObjectContainer {
         //mainText.textAlign = egret.HorizontalAlign.CENTER; 居中
         Page1.addChild(mainText);
         
-        var snow1:egret.Bitmap = this.createBitmapByName("snow100_png");//旋转动画
+        var snow1:egret.Bitmap = this.createBitmapByName("snow100_png");//移动对象
         snow1.anchorOffsetX = snow1.width/2;
         snow1.anchorOffsetY = snow1.height/2;
         snow1.x=100;
         snow1.y=100;
+        snow1.alpha = 0.8;
         Page1.addChild(snow1);
-        move1(snow1);
-
-
+      
+        var move : Function = function(){     //移动方法
+             var m1 = egret.Tween.get(snow1);
+             m1.to({x:600,y:1000},30000);
+        }
+        move();
 //--------------------------------------------***************-----------------------------------------------//
  /**
  * 
@@ -192,21 +194,17 @@ class Main extends egret.DisplayObjectContainer {
         pagemove(Page2);
 
 
-        var sky2:egret.Bitmap = this.createBitmapByName("bg1_jpg");
+        var sky2:egret.Bitmap = this.createBitmapByName("bg1_jpg");//背景图
         var stageW:number = this.stage.stageWidth;
         var stageH:number = this.stage.stageHeight;
         sky2.width = stageW;
         sky2.height = stageH;
         Page2.addChild(sky2);
 
-        /*var longsnow:egret.Bitmap = this.createBitmapByName("snow640_png");
-        longsnow.x=10;
-        longsnow.y=335;
-        Page2.addChild(longsnow);*/
         
 
 
-        var topMask = new egret.Shape();
+        var topMask = new egret.Shape();   //标题背景
         topMask.graphics.beginFill(0xFFFFFF, 0.5);
         topMask.graphics.drawRect(0, 0, stageW, 172);
         topMask.graphics.endFill();
@@ -215,7 +213,7 @@ class Main extends egret.DisplayObjectContainer {
 
 
 
-        var secondMask = new egret.Shape();
+        var secondMask = new egret.Shape();   //文字背景
         secondMask.graphics.beginFill(0xFFFFFF, 0.3);
         secondMask.graphics.drawRect(0, 0, stageW-40, 720);
         secondMask.graphics.endFill();
@@ -223,12 +221,12 @@ class Main extends egret.DisplayObjectContainer {
         secondMask.y = 315;
         Page2.addChild(secondMask);
 
-        var longsnow:egret.Bitmap = this.createBitmapByName("snow640_png");
+        var longsnow:egret.Bitmap = this.createBitmapByName("snow640_png");//雪花条幅
         longsnow.x=18;
         longsnow.y=335;
         Page2.addChild(longsnow);
 
-        var introduce = new egret.TextField();
+        var introduce = new egret.TextField();  //文字介绍
         introduce.text="个人介绍\n\n\n"
         +"❤姓名：张琳\n\n\n"
         +"❤年龄：21\n\n\n"
@@ -249,7 +247,7 @@ class Main extends egret.DisplayObjectContainer {
         icon.y = 43;
         Page2.addChild(icon);
 
-        var line = new egret.Shape();
+        var line = new egret.Shape();   //画线
         line.graphics.lineStyle(2,0xffffff);
         line.graphics.moveTo(0,0);
         line.graphics.lineTo(0,117);
@@ -260,7 +258,7 @@ class Main extends egret.DisplayObjectContainer {
 
 
 
-        var textfield = new egret.TextField();
+        var textfield = new egret.TextField();    //TextField
         this.addChild(textfield);
         textfield.alpha = 0;
         textfield.width = stageW - 172;
@@ -280,6 +278,21 @@ class Main extends egret.DisplayObjectContainer {
         title.y = 80;
         Page2.addChild(title);
 
+        var snow2:egret.Bitmap = this.createBitmapByName("snow50_png");//旋转图案
+        snow2.anchorOffsetX = snow2.width/2;
+        snow2.anchorOffsetY = snow2.height/2;
+        snow2.x=245;
+        snow2.y=90;
+        Page2.addChild(snow2);
+       
+
+        var spin : Function = function(){   //旋转方法
+            var circle1 = egret.Tween.get(snow2);
+            circle1.to( {rotation: -360}, 20000);    
+            circle1.call(spin, 20000);
+        }
+        spin();
+
 
 //--------------------------------------------***************-----------------------------------------------//
 /**
@@ -288,18 +301,11 @@ class Main extends egret.DisplayObjectContainer {
  * 
  */
 
-    
 
-        function move1(snow1:egret.Bitmap):void{
-                var circle = egret.Tween.get(snow1);
-                circle.to({x:600,y:1000},30000);
-
-        }
-
-        function pagemove(p:Page):void {
+        function pagemove(p:Page):void {    //翻页方法
              p.addEventListener(egret.TouchEvent.TOUCH_BEGIN, p.mouseDown, p);
              p.addEventListener(egret.TouchEvent.TOUCH_END, p.mouseUp, p);            
-        }//页面翻动     
+        }    
 
         //根据name关键字，异步获取一个json配置文件，name属性请参考resources/resource.json配置文件的内容。
         // Get asynchronously a json configuration file according to name keyword. As for the property of name please refer to the configuration file of resources/resource.json.
@@ -366,8 +372,8 @@ class Main extends egret.DisplayObjectContainer {
 
 class Page extends egret.DisplayObjectContainer {
 
-    private _touchStatus:boolean = false;              //当前触摸状态，按下时，值为true
-    private _distance:egret.Point = new egret.Point(); //鼠标点击时，鼠标全局坐标与_bird的位置差
+    private _touchStatus:boolean = false;              
+    private _distance:egret.Point = new egret.Point(); 
 
     public mouseDown(evt:egret.TouchEvent) {
              this._touchStatus = true;

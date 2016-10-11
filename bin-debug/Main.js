@@ -112,13 +112,13 @@ var Main = (function (_super) {
         this.addChild(Page1);
         Page1.touchEnabled = true;
         pagemove(Page1);
-        var sky1 = this.createBitmapByName("bg2_jpg");
+        var sky1 = this.createBitmapByName("bg2_jpg"); //背景图
         var stageW = this.stage.stageWidth;
         var stageH = this.stage.stageHeight;
         sky1.width = stageW;
         sky1.height = stageH;
         Page1.addChild(sky1);
-        var bottomMask = new egret.Shape();
+        var bottomMask = new egret.Shape(); //主体白色背景框
         bottomMask.graphics.beginFill(0xFFFFFF, 0.5);
         bottomMask.graphics.drawRect(0, 0, 550, 560);
         bottomMask.graphics.endFill();
@@ -143,13 +143,18 @@ var Main = (function (_super) {
         mainText.y = 530;
         //mainText.textAlign = egret.HorizontalAlign.CENTER; 居中
         Page1.addChild(mainText);
-        var snow1 = this.createBitmapByName("snow100_png"); //旋转动画
+        var snow1 = this.createBitmapByName("snow100_png"); //移动对象
         snow1.anchorOffsetX = snow1.width / 2;
         snow1.anchorOffsetY = snow1.height / 2;
         snow1.x = 100;
         snow1.y = 100;
+        snow1.alpha = 0.8;
         Page1.addChild(snow1);
-        move1(snow1);
+        var move = function () {
+            var m1 = egret.Tween.get(snow1);
+            m1.to({ x: 600, y: 1000 }, 30000);
+        };
+        move();
         //--------------------------------------------***************-----------------------------------------------//
         /**
         *
@@ -160,34 +165,30 @@ var Main = (function (_super) {
         this.addChild(Page2);
         Page2.touchEnabled = true;
         pagemove(Page2);
-        var sky2 = this.createBitmapByName("bg1_jpg");
+        var sky2 = this.createBitmapByName("bg1_jpg"); //背景图
         var stageW = this.stage.stageWidth;
         var stageH = this.stage.stageHeight;
         sky2.width = stageW;
         sky2.height = stageH;
         Page2.addChild(sky2);
-        /*var longsnow:egret.Bitmap = this.createBitmapByName("snow640_png");
-        longsnow.x=10;
-        longsnow.y=335;
-        Page2.addChild(longsnow);*/
-        var topMask = new egret.Shape();
+        var topMask = new egret.Shape(); //标题背景
         topMask.graphics.beginFill(0xFFFFFF, 0.5);
         topMask.graphics.drawRect(0, 0, stageW, 172);
         topMask.graphics.endFill();
         topMask.y = 33;
         Page2.addChild(topMask);
-        var secondMask = new egret.Shape();
+        var secondMask = new egret.Shape(); //文字背景
         secondMask.graphics.beginFill(0xFFFFFF, 0.3);
         secondMask.graphics.drawRect(0, 0, stageW - 40, 720);
         secondMask.graphics.endFill();
         secondMask.x = 20;
         secondMask.y = 315;
         Page2.addChild(secondMask);
-        var longsnow = this.createBitmapByName("snow640_png");
+        var longsnow = this.createBitmapByName("snow640_png"); //雪花条幅
         longsnow.x = 18;
         longsnow.y = 335;
         Page2.addChild(longsnow);
-        var introduce = new egret.TextField();
+        var introduce = new egret.TextField(); //文字介绍
         introduce.text = "个人介绍\n\n\n"
             + "❤姓名：张琳\n\n\n"
             + "❤年龄：21\n\n\n"
@@ -206,7 +207,7 @@ var Main = (function (_super) {
         icon.x = 26;
         icon.y = 43;
         Page2.addChild(icon);
-        var line = new egret.Shape();
+        var line = new egret.Shape(); //画线
         line.graphics.lineStyle(2, 0xffffff);
         line.graphics.moveTo(0, 0);
         line.graphics.lineTo(0, 117);
@@ -214,7 +215,7 @@ var Main = (function (_super) {
         line.x = 172;
         line.y = 61;
         Page2.addChild(line);
-        var textfield = new egret.TextField();
+        var textfield = new egret.TextField(); //TextField
         this.addChild(textfield);
         textfield.alpha = 0;
         textfield.width = stageW - 172;
@@ -232,20 +233,28 @@ var Main = (function (_super) {
         title.x = 280;
         title.y = 80;
         Page2.addChild(title);
+        var snow2 = this.createBitmapByName("snow50_png"); //旋转图案
+        snow2.anchorOffsetX = snow2.width / 2;
+        snow2.anchorOffsetY = snow2.height / 2;
+        snow2.x = 245;
+        snow2.y = 90;
+        Page2.addChild(snow2);
+        var spin = function () {
+            var circle1 = egret.Tween.get(snow2);
+            circle1.to({ rotation: -360 }, 20000);
+            circle1.call(spin, 20000);
+        };
+        spin();
         //--------------------------------------------***************-----------------------------------------------//
         /**
          *
          * functions
          *
          */
-        function move1(snow1) {
-            var circle = egret.Tween.get(snow1);
-            circle.to({ x: 600, y: 1000 }, 30000);
-        }
         function pagemove(p) {
             p.addEventListener(egret.TouchEvent.TOUCH_BEGIN, p.mouseDown, p);
             p.addEventListener(egret.TouchEvent.TOUCH_END, p.mouseUp, p);
-        } //页面翻动     
+        }
         //根据name关键字，异步获取一个json配置文件，name属性请参考resources/resource.json配置文件的内容。
         // Get asynchronously a json configuration file according to name keyword. As for the property of name please refer to the configuration file of resources/resource.json.
         RES.getResAsync("description_json", this.startAnimation, this);
@@ -302,8 +311,8 @@ var Page = (function (_super) {
     __extends(Page, _super);
     function Page() {
         _super.apply(this, arguments);
-        this._touchStatus = false; //当前触摸状态，按下时，值为true
-        this._distance = new egret.Point(); //鼠标点击时，鼠标全局坐标与_bird的位置差
+        this._touchStatus = false;
+        this._distance = new egret.Point();
     }
     var d = __define,c=Page,p=c.prototype;
     p.mouseDown = function (evt) {
