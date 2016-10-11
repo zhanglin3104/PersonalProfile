@@ -103,7 +103,12 @@ var Main = (function (_super) {
     p.createGameScene = function () {
         var stageW = this.stage.stageWidth;
         var stageH = this.stage.stageHeight;
-        var Page1 = new Page(); //页面一
+        /**
+         *
+         * the first page
+         * a poetry
+         */
+        var Page1 = new Page();
         this.addChild(Page1);
         Page1.touchEnabled = true;
         pagemove(Page1);
@@ -113,7 +118,14 @@ var Main = (function (_super) {
         sky1.width = stageW;
         sky1.height = stageH;
         Page1.addChild(sky1);
-        var mainText = new egret.TextField(); //第二页文字主体
+        var bottomMask = new egret.Shape();
+        bottomMask.graphics.beginFill(0xFFFFFF, 0.5);
+        bottomMask.graphics.drawRect(0, 0, 550, 560);
+        bottomMask.graphics.endFill();
+        bottomMask.x = 50;
+        bottomMask.y = 500;
+        Page1.addChild(bottomMask);
+        var mainText = new egret.TextField(); //第一页文字主体
         mainText.text = "Ode to the West Wind\n\n\n"
             + "My spirit! Be thou me, impetuous one!\n\n"
             + "Drive my dead thoughts over the universe\n\n"
@@ -124,15 +136,27 @@ var Main = (function (_super) {
             + "Be through my lips to unawaken'd earth\n\n"
             + "The trumpet of a prophecy78! Oh Wind,\n\n"
             + "If Winter comes, can Spring be far behind?";
-        //mainText.text = "My PersonalProfile";
         mainText.textColor = 0xFFFFFF;
         mainText.alpha = 1;
         mainText.size = 24;
-        mainText.x = 100;
-        mainText.y = 550;
+        mainText.x = 80;
+        mainText.y = 530;
         //mainText.textAlign = egret.HorizontalAlign.CENTER; 居中
         Page1.addChild(mainText);
-        var Page2 = new Page(); //页面二
+        var snow1 = this.createBitmapByName("snow100_png"); //旋转动画
+        snow1.anchorOffsetX = snow1.width / 2;
+        snow1.anchorOffsetY = snow1.height / 2;
+        snow1.x = 100;
+        snow1.y = 100;
+        Page1.addChild(snow1);
+        move1(snow1);
+        //--------------------------------------------***************-----------------------------------------------//
+        /**
+        *
+        * the second page
+        * avatar and introduce
+        */
+        var Page2 = new Page();
         this.addChild(Page2);
         Page2.touchEnabled = true;
         pagemove(Page2);
@@ -142,12 +166,41 @@ var Main = (function (_super) {
         sky2.width = stageW;
         sky2.height = stageH;
         Page2.addChild(sky2);
+        /*var longsnow:egret.Bitmap = this.createBitmapByName("snow640_png");
+        longsnow.x=10;
+        longsnow.y=335;
+        Page2.addChild(longsnow);*/
         var topMask = new egret.Shape();
-        topMask.graphics.beginFill(0x000000, 0.5);
+        topMask.graphics.beginFill(0xFFFFFF, 0.5);
         topMask.graphics.drawRect(0, 0, stageW, 172);
         topMask.graphics.endFill();
         topMask.y = 33;
         Page2.addChild(topMask);
+        var secondMask = new egret.Shape();
+        secondMask.graphics.beginFill(0xFFFFFF, 0.3);
+        secondMask.graphics.drawRect(0, 0, stageW - 40, 720);
+        secondMask.graphics.endFill();
+        secondMask.x = 20;
+        secondMask.y = 315;
+        Page2.addChild(secondMask);
+        var longsnow = this.createBitmapByName("snow640_png");
+        longsnow.x = 18;
+        longsnow.y = 335;
+        Page2.addChild(longsnow);
+        var introduce = new egret.TextField();
+        introduce.text = "个人介绍\n\n\n"
+            + "❤姓名：张琳\n\n\n"
+            + "❤年龄：21\n\n\n"
+            + "❤星座：处女座\n\n\n"
+            + "❤喜欢的爱豆：ARASHI！\n\n\n"
+            + "❤喜欢的歌：Harmony of December\n\n\n"
+            + "❤最近想看的书：《古事纪》\n\n\n"
+            + "❤最近想看的动漫：命运石之门\n\n\n";
+        introduce.size = 18;
+        introduce.textColor = 0xffffff;
+        introduce.x = 45;
+        introduce.y = 500;
+        Page2.addChild(introduce);
         var icon = this.createBitmapByName("avatar_jpg"); //头像
         this.addChild(icon);
         icon.x = 26;
@@ -173,21 +226,22 @@ var Main = (function (_super) {
         this.textfield = textfield;
         var title = new egret.TextField(); //标题
         title.text = "My PersonalProfile";
-        title.textColor = 0xFFFFFF;
+        title.textColor = 0x00BFFF;
         title.alpha = 1;
         title.size = 24;
         title.x = 280;
         title.y = 80;
         Page2.addChild(title);
-        /* function changescale(icon:egret.Bitmap,sX:number,sY:number):void {
-                   var n = 0;
-                   icon.anchorOffsetX = icon.width/2;
-                   icon.anchorOffsetY = icon.height/2;//改变锚点位置
-                   icon.addEventListener( egret.Event.ENTER_FRAME, ( evt:egret.Event )=>{
-                   icon.scaleX = icon.scaleY = 0.5*sX + 0.5*sY* Math.abs( Math.sin( n += Main.STEP_SCALE ) );
-                   },this);             /// 仅缩放，缩放范围
-             }//自身放大缩小
-             */
+        //--------------------------------------------***************-----------------------------------------------//
+        /**
+         *
+         * functions
+         *
+         */
+        function move1(snow1) {
+            var circle = egret.Tween.get(snow1);
+            circle.to({ x: 600, y: 1000 }, 30000);
+        }
         function pagemove(p) {
             p.addEventListener(egret.TouchEvent.TOUCH_BEGIN, p.mouseDown, p);
             p.addEventListener(egret.TouchEvent.TOUCH_END, p.mouseUp, p);
@@ -241,31 +295,6 @@ var Main = (function (_super) {
     p.changeDescription = function (textfield, textFlow) {
         textfield.textFlow = textFlow;
     };
-    p.createMask = function (x, y, w, h) {
-        var Mask = new egret.Shape();
-        Mask.graphics.beginFill(0x000000, 0.5);
-        Mask.graphics.drawRect(x, y, w, h);
-        Mask.graphics.endFill();
-        return Mask;
-    }; //生成黑框
-    /*private createsky(filename:string,w:number,h:number):egret.Bitmap {
-        var sky:egret.Bitmap = this.createBitmapByName(filename,0,0,1,1);
-        sky.width = w;
-        sky.height = h;
-        return sky;
-    */ //生成页面背景
-    p.createText = function (x, y, s) {
-        var nomalText = new egret.TextField();
-        nomalText.width = this.stage.stageWidth - 172;
-        nomalText.textAlign = "left";
-        nomalText.bold = true;
-        nomalText.fontFamily = "Microsoft YaHei";
-        nomalText.x = x;
-        nomalText.y = y;
-        nomalText.size = s;
-        nomalText.cacheAsBitmap = true;
-        return nomalText;
-    }; //格式化生成文字（具有相同特点）
     return Main;
 }(egret.DisplayObjectContainer));
 egret.registerClass(Main,'Main');
@@ -312,15 +341,4 @@ var Page = (function (_super) {
     return Page;
 }(egret.DisplayObjectContainer));
 egret.registerClass(Page,'Page');
- //页面类
-var AnimModes = (function () {
-    function AnimModes() {
-    }
-    var d = __define,c=AnimModes,p=c.prototype;
-    AnimModes.Anim_0 = 0;
-    AnimModes.Anim_1 = 1;
-    return AnimModes;
-}());
-egret.registerClass(AnimModes,'AnimModes');
- //按钮模式类
 //# sourceMappingURL=Main.js.map
