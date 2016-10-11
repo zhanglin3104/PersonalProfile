@@ -117,24 +117,70 @@ class Main extends egret.DisplayObjectContainer {
      * Create a game scene
      */
     private createGameScene():void {
-        var sky1:egret.Bitmap = this.createBitmapByName("bg1_jpg");//第一张背景
-        this.addChild(sky1);
+        
+        var stageW = this.stage.stageWidth;
+        var stageH = this.stage.stageHeight;
+
+
+        var Page1:Page = new Page();//页面一
+        this.addChild(Page1);
+        Page1.touchEnabled = true;
+        pagemove(Page1);
+
+        var sky1:egret.Bitmap = this.createBitmapByName("bg2_jpg");
         var stageW:number = this.stage.stageWidth;
         var stageH:number = this.stage.stageHeight;
         sky1.width = stageW;
         sky1.height = stageH;
+        Page1.addChild(sky1);
 
-        var topMask = new egret.Shape();
+        var mainText:egret.TextField = new egret.TextField();//第二页文字主体
+        mainText.text = "Ode to the West Wind\n\n\n"
+        + "My spirit! Be thou me, impetuous one!\n\n"
+        + "Drive my dead thoughts over the universe\n\n"
+        + "Like wither'd leaves to quicken a new birth!\n\n"
+        + "And, by the incantation of this verse\n\n"
+        + "Scatter, as from an unextinguish'd hearth\n\n"
+        + "Ashes and sparks, my words among mankind!\n\n"
+        + "Be through my lips to unawaken'd earth\n\n"
+        + "The trumpet of a prophecy78! Oh Wind,\n\n"
+        + "If Winter comes, can Spring be far behind?" ;
+       
+        //mainText.text = "My PersonalProfile";
+        mainText.textColor = 0xFFFFFF;
+        mainText.alpha = 1;
+        mainText.size = 24;
+        mainText.x = 100;
+        mainText.y = 550;
+        //mainText.textAlign = egret.HorizontalAlign.CENTER; 居中
+        Page1.addChild(mainText);
+        
+
+        var Page2:Page = new Page();//页面二
+        this.addChild(Page2);
+        Page2.touchEnabled = true;
+        pagemove(Page2);
+
+
+        var sky2:egret.Bitmap = this.createBitmapByName("bg1_jpg");
+        var stageW:number = this.stage.stageWidth;
+        var stageH:number = this.stage.stageHeight;
+        sky2.width = stageW;
+        sky2.height = stageH;
+        Page2.addChild(sky2);
+
+       var topMask = new egret.Shape();
         topMask.graphics.beginFill(0x000000, 0.5);
         topMask.graphics.drawRect(0, 0, stageW, 172);
         topMask.graphics.endFill();
         topMask.y = 33;
-        this.addChild(topMask);
+        Page2.addChild(topMask);
 
         var icon:egret.Bitmap = this.createBitmapByName("avatar_jpg");//头像
         this.addChild(icon);
         icon.x = 26;
-        icon.y = 33;
+        icon.y = 43;
+        Page2.addChild(icon);
 
         var line = new egret.Shape();
         line.graphics.lineStyle(2,0xffffff);
@@ -143,7 +189,7 @@ class Main extends egret.DisplayObjectContainer {
         line.graphics.endFill();
         line.x = 172;
         line.y = 61;
-        this.addChild(line);
+        Page2.addChild(line);
 
 
 
@@ -165,46 +211,26 @@ class Main extends egret.DisplayObjectContainer {
         title.size = 24;
         title.x = 280;
         title.y = 80;
-        this.addChild(title);
+        Page2.addChild(title);
+
+
+   /* function changescale(icon:egret.Bitmap,sX:number,sY:number):void {
+              var n = 0;
+              icon.anchorOffsetX = icon.width/2;
+              icon.anchorOffsetY = icon.height/2;//改变锚点位置
+              icon.addEventListener( egret.Event.ENTER_FRAME, ( evt:egret.Event )=>{
+              icon.scaleX = icon.scaleY = 0.5*sX + 0.5*sY* Math.abs( Math.sin( n += Main.STEP_SCALE ) );
+              },this);             /// 仅缩放，缩放范围
+        }//自身放大缩小
+        */
+        function pagemove(p:Page):void {
+             p.addEventListener(egret.TouchEvent.TOUCH_BEGIN, p.mouseDown, p);
+             p.addEventListener(egret.TouchEvent.TOUCH_END, p.mouseUp, p);            
+        }//页面翻动     
 
         //根据name关键字，异步获取一个json配置文件，name属性请参考resources/resource.json配置文件的内容。
         // Get asynchronously a json configuration file according to name keyword. As for the property of name please refer to the configuration file of resources/resource.json.
         RES.getResAsync("description_json", this.startAnimation, this)
-
-        
-        var sky2: egret.Bitmap = this.createBitmapByName("bg2_jpg");//第二张背景
-        this.addChild(sky2);
-        sky2.width = stageW;
-        sky2.height = stageH;
-        sky2.x = 640;
-        sky2.y = 0;
-        sky2.touchEnabled = true;
-
-        
-        var mainText:egret.TextField = new egret.TextField();//第二页文字主体
-        mainText.text = "Ode to the West Wind\n\n"
-        + "My spirit! Be thou me, impetuous one!\n\n"
-        + "Drive my dead thoughts over the universe\n"
-        + "Like wither'd leaves to quicken a new birth!\n"
-        + "And, by the incantation of this verse\n"
-        + "Scatter, as from an unextinguish'd hearth\n"
-        + "Ashes and sparks, my words among mankind!\n"
-        + "Be through my lips to unawaken'd earth\n"
-        + "The trumpet of a prophecy78! Oh Wind,\n"
-        + "If Winter comes, can Spring be far behind?" ;
-
-
-        this.addChild(mainText);
-        mainText.textColor = 0x000000;
-        mainText.alpha = 0;
-        mainText.x = 50;
-        mainText.y = 600;
-
-        var pageNumAll = 1;
-        var pageArray = [sky1, sky2];
-        var textArray = [title, mainText];
-        //this.pageTurningBitmap(pageArray, pageNumAll, textArray);
-        
     }
 
     /**
@@ -259,6 +285,80 @@ class Main extends egret.DisplayObjectContainer {
     private changeDescription(textfield:egret.TextField, textFlow:Array<egret.ITextElement>):void {
         textfield.textFlow = textFlow;
     }
+
+
+
+private createMask(x:number,y:number,w:number,h:number):egret.Shape {
+        var Mask = new egret.Shape();
+        Mask.graphics.beginFill(0x000000, 0.5);
+        Mask.graphics.drawRect(x, y, w, h);
+        Mask.graphics.endFill();
+        return Mask;
+    }//生成黑框
+  
+    /*private createsky(filename:string,w:number,h:number):egret.Bitmap {
+        var sky:egret.Bitmap = this.createBitmapByName(filename,0,0,1,1);      
+        sky.width = w;
+        sky.height = h;
+        return sky;
+    *///生成页面背景
+
+    private createText(x:number,y:number,s:number):egret.TextField{
+        var nomalText = new egret.TextField();
+        nomalText.width = this.stage.stageWidth - 172;
+        nomalText.textAlign = "left";       
+        nomalText.bold = true;
+        nomalText.fontFamily = "Microsoft YaHei";
+        nomalText.x = x;
+        nomalText.y = y;
+        nomalText.size = s; 
+        nomalText.cacheAsBitmap = true;
+        return nomalText;
+    }//格式化生成文字（具有相同特点）
 }
 
+class Page extends egret.DisplayObjectContainer {
 
+    private _touchStatus:boolean = false;              //当前触摸状态，按下时，值为true
+    private _distance:egret.Point = new egret.Point(); //鼠标点击时，鼠标全局坐标与_bird的位置差
+
+    public mouseDown(evt:egret.TouchEvent) {
+             this._touchStatus = true;
+             this._distance.y = evt.stageY - this.y;
+             this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.mouseMove, this);
+    }
+
+    private mouseMove(evt:egret.TouchEvent) {
+            if( this._touchStatus ) {
+                 this.y = evt.stageY - this._distance.y;
+                 if( this.y < -500 ){
+                     egret.Tween.get( this ).to( {x:0,y:-1136}, 400, egret.Ease.sineIn )
+                     .wait(300).to({x:0,y:0}, 100, egret.Ease.sineIn);
+                     this.parent.addChildAt(this,0);
+                     this.stage.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.mouseMove, this);
+                 }
+                 if( this.y > 500 ){
+                     egret.Tween.get( this ).to( {x:0,y:-1136}, 400, egret.Ease.sineIn )
+                     .wait(300).to({x:0,y:0}, 100, egret.Ease.sineIn);
+                     this.parent.addChildAt(this,0);
+                     this.stage.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.mouseMove, this);
+                 }
+            }            
+    }
+
+    public mouseUp(evt:egret.TouchEvent) {
+            this._touchStatus = false;
+            if( this.y >= -500 ) {
+                egret.Tween.get( this ).to( {x:0,y:0}, 300, egret.Ease.sineIn );
+            }
+            if( this.y <= 500 ) {
+                egret.Tween.get( this ).to( {x:0,y:0}, 300, egret.Ease.sineIn );
+            }
+            this.stage.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.mouseMove, this);
+    }
+}//页面类
+
+class AnimModes{
+    public static Anim_0:number = 0;
+    public static Anim_1:number = 1;
+}//按钮模式类

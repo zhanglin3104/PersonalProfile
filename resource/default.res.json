@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,egret_icon_png,description_json,bg1_jpg,bg2_jpg,avatar_jpg,snow50_png,snow100_png,snow640_png,tree640_png",
+			"keys": "bg_jpg,egret_icon_png,description_json,avatar_jpg,bg1_jpg,bg2_jpg,snow50_png,snow100_png,snow640_png,tree640_png",
 			"name": "preload"
 		}
 	],
@@ -22,6 +22,11 @@
 			"url": "config/description.json"
 		},
 		{
+			"name": "avatar_jpg",
+			"type": "image",
+			"url": "assets/avatar.jpg"
+		},
+		{
 			"name": "bg1_jpg",
 			"type": "image",
 			"url": "assets/bg1.jpg"
@@ -30,11 +35,6 @@
 			"name": "bg2_jpg",
 			"type": "image",
 			"url": "assets/bg2.jpg"
-		},
-		{
-			"name": "avatar_jpg",
-			"type": "image",
-			"url": "assets/avatar.jpg"
 		},
 		{
 			"name": "snow50_png",
